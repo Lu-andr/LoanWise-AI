@@ -101,7 +101,7 @@ export default function ResultsDashboard({ record, onRestart, onSaveHistory }: R
             id="btn-save-record-history"
             onClick={() => {
               onSaveHistory(record);
-              alert('Assessment snapshot successfully hard-vetted into Local History archive!');
+              alert('Assessment snapshot successfully saved in your Local History archive!');
             }}
             className="flex-1 sm:flex-initial px-4 py-2.5 bg-white border border-slate-200 text-slate-700 font-bold text-xs rounded-xl hover:bg-slate-50 transition-colors flex items-center justify-center gap-1"
           >
@@ -113,7 +113,7 @@ export default function ResultsDashboard({ record, onRestart, onSaveHistory }: R
             onClick={onRestart}
             className="flex-1 sm:flex-initial px-4 py-2.5 bg-[#5B4CF0] hover:bg-[#4a3ce0] text-white font-bold text-xs rounded-xl shadow transition-all flex items-center justify-center gap-1"
           >
-            <RefreshCw size={14} /> New Vetting Run
+            <RefreshCw size={14} /> New Assessment
           </button>
         </div>
       </div>

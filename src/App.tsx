@@ -5,7 +5,6 @@ import {
   Activity, 
   History as HistoryIcon, 
   Settings as SettingsIcon, 
-  BookOpen, 
   Sparkles, 
   TrendingUp, 
   HelpCircle,
@@ -19,11 +18,10 @@ import ResultsDashboard from './components/ResultsDashboard';
 import InsightsPage from './components/InsightsPage';
 import HistoryPage from './components/HistoryPage';
 import SettingsPage from './components/SettingsPage';
-import PRDViewer from './components/PRDViewer';
 import { evaluateLoanAssessment } from './utils/calculator';
 
 export default function App() {
-  const [currentScreen, setCurrentScreen] = useState<'landing' | 'assessment' | 'results' | 'insights' | 'history' | 'settings' | 'prd'>('landing');
+  const [currentScreen, setCurrentScreen] = useState<'landing' | 'assessment' | 'results' | 'insights' | 'history' | 'settings'>('landing');
   const [records, setRecords] = useState<AssessmentRecord[]>([]);
   const [activeRecord, setActiveRecord] = useState<AssessmentRecord | null>(null);
   const [draftPrefill, setDraftPrefill] = useState<Partial<LoanInput> | undefined>(undefined);
@@ -269,7 +267,6 @@ export default function App() {
               { id: 'insights', label: 'What-If Simulator', icon: TrendingUp },
               { id: 'history', label: 'Audit History', icon: HistoryIcon },
               { id: 'settings', label: 'Preferences', icon: SettingsIcon },
-              { id: 'prd', label: 'Architect Blueprint', icon: BookOpen },
             ].map((navItem) => {
               const Icon = navItem.icon;
               const isActive = currentScreen === navItem.id || (navItem.id === 'assessment' && currentScreen === 'results');
@@ -317,7 +314,6 @@ export default function App() {
               { id: 'insights', label: 'What-If Simulator', icon: TrendingUp },
               { id: 'history', label: 'Audit History', icon: HistoryIcon },
               { id: 'settings', label: 'Preferences', icon: SettingsIcon },
-              { id: 'prd', label: 'Architect Blueprint', icon: BookOpen },
             ].map((navItem) => {
               const Icon = navItem.icon;
               const isActive = currentScreen === navItem.id || (navItem.id === 'assessment' && currentScreen === 'results');
@@ -351,10 +347,6 @@ export default function App() {
         {currentScreen === 'landing' && (
           <LandingPage 
             onStartAssessment={handleStartPrefilledForm} 
-            onNavigateToPRD={() => {
-              setCurrentScreen('prd');
-              window.scrollTo({ top: 0, behavior: 'smooth' });
-            }}
           />
         )}
 
@@ -363,7 +355,7 @@ export default function App() {
           <div className="space-y-6 animate-fade-in" id="form-layout-shell">
             <div className="text-center max-w-lg mx-auto mb-2">
               <h1 className="text-xl font-extrabold text-slate-900 tracking-tight flex items-center justify-center gap-2">
-                 Eligibility Calculator Vetting System
+                 Eligibility Calculator Assessment System
               </h1>
               <p className="text-xs text-slate-500 leading-normal">
                 Submit accurate employment and liability fields. The calculator runs secure parameters before routing details to advisor proxies.
@@ -380,10 +372,10 @@ export default function App() {
         {currentScreen === 'results' && activeRecord && (
           <div className="animate-fade-in" id="results-layout-shell">
             {isAnalyzingAI && (
-              <div className="mb-6 p-4 bg-yellow-50 border border-yellow-100 text-yellow-800 rounded-2xl flex items-center justify-between text-xs animate-pulse font-medium">
+              <div className="mb-6 p-4 bg-yellow-50 border border-yellow-105 text-yellow-800 rounded-2xl flex items-center justify-between text-xs animate-pulse font-medium">
                 <span className="flex items-center gap-2">
                   <span className="w-2 h-2 rounded-full bg-[#F59E0B] animate-ping"></span>
-                  Vetting credit ratios locally... Submitting compiled metrics to Gemini AI Advisor Proxy. Please hold.
+                  Evaluating credit ratios securely... Submitting compiled metrics to Gemini AI Advisor Proxy. Please hold.
                 </span>
               </div>
             )}
@@ -420,40 +412,19 @@ export default function App() {
             <SettingsPage 
               profile={profile} 
               onChangeProfile={handleProfileChange}
-              onFactoryReset={handleFactoryReset}
             />
-          </div>
-        )}
-
-        {/* BLUEPRINT PRD SCREEN */}
-        {currentScreen === 'prd' && (
-          <div className="animate-fade-in">
-            <PRDViewer onStartApp={() => {
-              setCurrentScreen('landing');
-              window.scrollTo({ top: 0, behavior: 'smooth' });
-            }} />
           </div>
         )}
 
       </main>
 
-      {/* Humble Footer with Architect portal shortcuts and indicators */}
-      <footer className="border-t border-slate-100/50 mt-12 py-6 text-center text-slate-400 text-xs text-transparent bg-clip-text bg-gradient-to-r from-slate-450 to-slate-400 flex flex-col md:flex-row justify-between items-center max-w-7xl mx-auto px-4 gap-4" id="app-footer">
+      {/* Humble Footer with Secure Cloud status */}
+      <footer className="border-t border-slate-100/50 mt-12 py-6 text-center text-slate-400 text-xs flex flex-col md:flex-row justify-between items-center max-w-7xl mx-auto px-4 gap-4" id="app-footer">
         <div>
-          <span>&copy; 2026 LoanWise AI Advisor System. Powered by Google AI Studio Gemini Runtimes.</span>
+          <span>&copy; 2026 LoanWise AI Advisor System. Powered by secure client assistance models.</span>
         </div>
         <div className="flex gap-4 items-center">
-          <button 
-            id="footer-prd-action"
-            onClick={() => {
-              setCurrentScreen('prd');
-              window.scrollTo({ top: 0, behavior: 'smooth' });
-            }}
-            className="text-[11px] font-bold text-indigo-600 hover:text-indigo-805 transition-colors bg-indigo-50 px-3 py-1.5 rounded-lg border border-indigo-100"
-          >
-            Review PRD & Tech Manual Blueprint
-          </button>
-          <span className="text-[10px] uppercase font-bold tracking-wider text-emerald-500 bg-emerald-500/10 px-2 py-0.5 border border-emerald-500/20 rounded-md">Vetting Environment Live</span>
+          <span className="text-[10px] uppercase font-bold tracking-wider text-emerald-500 bg-emerald-500/10 px-2.5 py-1 border border-emerald-500/20 rounded-md">Secure Cloud Session Active</span>
         </div>
       </footer>
     </div>

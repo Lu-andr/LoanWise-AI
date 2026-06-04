@@ -110,7 +110,7 @@ export default function InsightsPage({ currentRecord }: InsightsPageProps) {
         <div className="relative z-10 flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
           <div className="space-y-1.5">
             <span className="px-3 py-1 bg-[#5B4CF0]/20 text-[#7A6FFF] text-[10px] font-bold rounded-full border border-indigo-600/30 uppercase tracking-widest flex items-center gap-1.5 w-max">
-              <Sliders size={11} className="text-[#55D6FF]" /> Playbook Sandbox
+              <Sliders size={11} className="text-[#55D6FF]" /> Playbook Simulator
             </span>
             <h1 className="text-xl font-bold tracking-tight">Eligibility Playbook & Scenario Simulator</h1>
             <p className="text-xs text-slate-400">

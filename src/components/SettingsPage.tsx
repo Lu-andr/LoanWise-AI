@@ -18,7 +18,7 @@ interface SettingsPageProps {
   onFactoryReset: () => void;
 }
 
-export default function SettingsPage({ profile, onChangeProfile, onFactoryReset }: SettingsPageProps) {
+export default function SettingsPage({ profile, onChangeProfile }: Omit<SettingsPageProps, 'onFactoryReset'>) {
   const [userName, setUserName] = useState<string>(profile.name);
   const [city, setCity] = useState<string>(profile.city);
   const [currency, setCurrency] = useState<string>(profile.currency);
@@ -43,13 +43,13 @@ export default function SettingsPage({ profile, onChangeProfile, onFactoryReset 
       
       {/* Title block */}
       <div>
-        <h1 className="text-xl font-bold text-slate-900 tracking-tight">Vetting Workspace Preferences</h1>
-        <p className="text-xs text-slate-500 font-medium">Control currency formatting, advisor profiles, and clear browser caches.</p>
+        <h1 className="text-xl font-bold text-slate-900 tracking-tight">System Preferences</h1>
+        <p className="text-xs text-slate-500 font-medium">Control currency formatting, profile details, and localized visual appearances.</p>
       </div>
 
       {/* Main Settings Card */}
       <form onSubmit={handleProfileSave} className="bg-white border border-slate-100 rounded-3xl p-6 md:p-8 shadow-sm space-y-5">
-        <h2 className="text-sm font-extrabold uppercase text-slate-400 tracking-widest border-b border-slate-50 pb-2">Advisor profile context</h2>
+        <h2 className="text-sm font-extrabold uppercase text-slate-400 tracking-widest border-b border-slate-50 pb-2">User Profile Settings</h2>
 
         {/* Profile name */}
         <div className="space-y-1">
@@ -120,48 +120,10 @@ export default function SettingsPage({ profile, onChangeProfile, onFactoryReset 
         {savedSuccess && (
           <div className="p-3 bg-emerald-50 text-emerald-800 border border-emerald-100 rounded-xl text-center text-xs font-semibold flex items-center justify-center gap-2" id="settings-save-success">
             <CheckCircle size={14} className="text-emerald-500" />
-            Vetting profile successfully synced dynamically!
+            Profile successfully saved!
           </div>
         )}
       </form>
-
-      {/* Guide explaining server-side credentials security (compliance check) */}
-      <div className="bg-[#F7F9FF] border border-slate-100 p-6 rounded-3xl space-y-3" id="api-key-technical-note">
-        <h3 className="text-xs font-bold text-slate-700 uppercase tracking-widest flex items-center gap-2">
-          <KeyRound size={14} className="text-[#5B4CF0]" /> Environment Secrets & API Credentials
-        </h3>
-        <p className="text-xs text-slate-550 leading-relaxed">
-          LoanWise AI implements security practices that isolate credentials complete with full-stack Node environments. Under this architecture, the <strong>GEMINI_API_KEY</strong> environment secret resides on server-side runtimes and is never leaked, bundled, or cached inside browser files.
-        </p>
-        <div className="p-3.5 bg-slate-900 text-slate-400 rounded-xl text-[10.5px] font-mono leading-relaxed border border-slate-800">
-          <span className="text-teal-400">// API settings verified:</span><br/>
-          GEMINI_API_KEY = &lt;Safe Backend Environment Secret Injection&gt;<br/>
-          HTTP_HEADER = {`'User-Agent': 'aistudio-build'`}
-        </div>
-        <p className="text-[10px] text-slate-400 font-medium">To configure or update key values, leverage your secure Secrets configuration panel inside the Google AI Studio settings dashboard.</p>
-      </div>
-
-      {/* Extreme Reset options */}
-      <div className="p-6 bg-rose-50/50 border border-rose-100 rounded-3xl space-y-3" id="factory-reset-section">
-        <h3 className="text-xs font-bold text-rose-800 uppercase tracking-widest flex items-center gap-1.5">
-          <Trash2 size={14} /> Factory Hard Reset Sandbox
-        </h3>
-        <p className="text-[11px] text-rose-700 leading-normal">
-          Completely flush all browser data, including local storage drafts, saved profiles, and history dockets. This operation is immediate and permanent.
-        </p>
-        <button
-          id="factory-reset-trigger-action"
-          type="button"
-          onClick={() => {
-            if (confirm('Are you sure you want to hard reset your entire LoanWise sandbox? All drafts, settings, and histories will be permanently wiped.')) {
-              onFactoryReset();
-            }
-          }}
-          className="px-4 py-2 bg-white border border-rose-200 text-rose-600 hover:bg-rose-50 text-xs font-bold rounded-xl transition-all shadow-xs"
-        >
-          Factory Reset Applet Sandbox
-        </button>
-      </div>
     </div>
   );
 }

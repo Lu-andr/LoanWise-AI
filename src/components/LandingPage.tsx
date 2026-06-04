@@ -19,10 +19,9 @@ import { LoanType } from '../types';
 
 interface LandingPageProps {
   onStartAssessment: (prefillAmounts?: { income: number; emi: number }) => void;
-  onNavigateToPRD: () => void;
 }
 
-export default function LandingPage({ onStartAssessment, onNavigateToPRD }: LandingPageProps) {
+export default function LandingPage({ onStartAssessment }: LandingPageProps) {
   // Quick pre-estimator state
   const [quickIncome, setQuickIncome] = useState<number>(5000);
   const [quickEmi, setQuickEmi] = useState<number>(500);
@@ -44,7 +43,7 @@ export default function LandingPage({ onStartAssessment, onNavigateToPRD }: Land
     },
     {
       icon: Sparkles,
-      title: 'AI Smart Advisory Vetting',
+      title: 'AI Smart Advisory Analysis',
       desc: 'Connect metrics securely to Gemini 3.5 Flash server proxies for 90-day action plans, customized rates, and eligibility hacks.'
     },
     {
@@ -83,20 +82,13 @@ export default function LandingPage({ onStartAssessment, onNavigateToPRD }: Land
           Unveil underwriting approvals before submitting official applications. Synthesize cashflow indicators, estimate DTI scores, and consult our virtual credit advisory powered by Gemini AI.
         </p>
 
-        <div className="flex flex-col sm:flex-row items-center justify-center gap-4 pt-4">
+        <div className="flex justify-center pt-4">
           <button
             id="cta-start-assessment"
             onClick={() => onStartAssessment()}
             className="w-full sm:w-auto px-8 py-4 bg-[#5B4CF0] hover:bg-[#4a3ce0] text-white font-bold rounded-xl shadow-lg shadow-indigo-600/20 active:scale-[0.98] transition-all flex items-center justify-center gap-2"
           >
             Run Free Credit Diagnostic <ArrowRight size={16} />
-          </button>
-          <button
-            id="cta-view-prd"
-            onClick={onNavigateToPRD}
-            className="w-full sm:w-auto px-6 py-4 bg-white hover:bg-slate-50 text-slate-700 font-bold rounded-xl border border-slate-200 transition-all flex items-center justify-center gap-2"
-          >
-            Review Technical Spec & PRD
           </button>
         </div>
       </div>
@@ -108,7 +100,7 @@ export default function LandingPage({ onStartAssessment, onNavigateToPRD }: Land
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
           <div className="space-y-4">
             <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400 flex items-center gap-1.5">
-              <Calculator size={13} className="text-[#5B4CF0]" /> Dynamic Underwriting Sandbox
+              <Calculator size={13} className="text-[#5B4CF0]" /> Dynamic Underwriting Simulation
             </span>
             <h2 className="text-xl font-bold text-slate-900">Pre-Check Debt Thresholds</h2>
             <p className="text-xs text-slate-500 leading-relaxed">
