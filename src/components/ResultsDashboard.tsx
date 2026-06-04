@@ -15,7 +15,7 @@ import {
   ShieldCheck, 
   ShieldAlert, 
   Activity, 
-  DollarSign, 
+  IndianRupee, 
   Percent, 
   TrendingUp, 
   Sparkles, 
@@ -26,6 +26,7 @@ import {
   AlertCircle
 } from 'lucide-react';
 import { AssessmentRecord } from '../types';
+import { formatCurrency } from '../utils/formatter';
 
 interface ResultsDashboardProps {
   record: AssessmentRecord;
@@ -37,9 +38,9 @@ export default function ResultsDashboard({ record, onRestart, onSaveHistory }: R
   const { input, metrics, aiAdvice } = record;
   const [activeTab, setActiveTab] = useState<'overview' | 'charts' | 'ai-report'>('overview');
 
-  // Format currencies
+  // Format currencies as Indian Rupee (₹)
   const formatUSD = (val: number) => {
-    return new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', maximumFractionDigits: 0 }).format(val);
+    return formatCurrency(val);
   };
 
   // 12-month projections
@@ -92,9 +93,9 @@ export default function ResultsDashboard({ record, onRestart, onSaveHistory }: R
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 border-b border-slate-100 pb-5">
         <div>
           <h1 className="text-2xl font-bold text-slate-900 tracking-tight flex items-center gap-2">
-            Assessment Docket #{record.id.slice(0, 6).toUpperCase()}
+            Assessment Snapshot #{record.id.slice(0, 6).toUpperCase()}
           </h1>
-          <p className="text-xs text-slate-500">Evaluated on {new Date(record.date).toLocaleString()} for ${input.loanAmount.toLocaleString()} {input.loanType.toUpperCase()} borrowing.</p>
+          <p className="text-xs text-slate-500">Evaluated on {new Date(record.date).toLocaleString()} for {formatUSD(input.loanAmount)} {input.loanType.toUpperCase()} borrowing.</p>
         </div>
         <div className="flex gap-2 w-full sm:w-auto">
           <button
@@ -122,7 +123,7 @@ export default function ResultsDashboard({ record, onRestart, onSaveHistory }: R
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         {/* Ring 1: Approval Probability Ring */}
         <div className="bg-white border border-slate-100 rounded-3xl p-6 flex flex-col items-center justify-center relative overflow-hidden" id="widget-probability-ring">
-          <h3 className="text-xs font-bold text-slate-400 uppercase tracking-widest mb-4">Unconditional Underwriting Probability</h3>
+          <h3 className="text-xs font-bold text-slate-400 uppercase tracking-widest mb-4">Approval Probability</h3>
           
           {/* Svg Circle */}
           <div className="relative w-40 h-40 flex items-center justify-center">
@@ -162,14 +163,14 @@ export default function ResultsDashboard({ record, onRestart, onSaveHistory }: R
             </div>
           </div>
           <p className="text-[10.5px] text-slate-500 text-center mt-4">
-            Based on a weighted profile composed from FICO records, liabilities cash flow stability ratio coefficients.
+            Based on your credit profile, monthly savings flow, and incoming obligations.
           </p>
         </div>
 
         {/* Ring 2: Risk Meter Card */}
         <div className="bg-white border border-slate-100 rounded-3xl p-6 flex flex-col justify-between" id="widget-risk-meter">
           <div>
-            <h3 className="text-xs font-bold text-[#EA580C] uppercase tracking-widest mb-1">Underwriter Risk Rating</h3>
+            <h3 className="text-xs font-bold text-[#EA580C] uppercase tracking-widest mb-1">Approval Risk</h3>
             <span className="text-[10px] text-slate-400 uppercase font-semibold">Stress Exposure Check</span>
           </div>
 
@@ -199,33 +200,33 @@ export default function ResultsDashboard({ record, onRestart, onSaveHistory }: R
           </div>
 
           <p className="text-[10.5px] text-slate-500">
-            Current committed debt payments (DTI) represent a major factor. Standard guidelines restrict exposure bounds under 45%.
+            Current monthly commitments compared to income represent a major factor. Standard guidelines suggest keeping overall obligations under 45%.
           </p>
         </div>
 
         {/* Ring 3: General Underwriting Indicators */}
         <div className="bg-white border border-slate-100 rounded-3xl p-6 flex flex-col justify-between" id="widget-financial-cards">
           <div>
-            <h3 className="text-xs font-bold text-[#5B4CF0] uppercase tracking-widest mb-1">Affordability Index</h3>
+            <h3 className="text-xs font-bold text-[#5B4CF0] uppercase tracking-widest mb-1">Comfortable Borrowing Limit</h3>
             <span className="text-[10px] text-slate-400 uppercase font-semibold">Maximum Loan Capacity Limit</span>
           </div>
 
           <div className="py-3">
-            <div className="text-xs text-slate-400 uppercase font-bold">Suggested Cap Ceiling</div>
+            <div className="text-xs text-slate-400 uppercase font-bold">Suggested Max Size</div>
             <div className="text-3xl font-extrabold text-indigo-700 font-mono tracking-tight">
               {formatUSD(metrics.maxAffordableLoan)}
             </div>
             <p className="text-[10px] text-slate-500 mt-1 leading-snug">
-              Estimated affordable principal size targeting a balanced amortisation DTI ratio below 40% under current rate matrices ({metrics.interestRate}%).
+              Estimated borrow limit targeting comfortable monthly loan repayment load under current rates ({metrics.interestRate}%).
             </p>
           </div>
 
           <div className="flex items-center gap-3 pt-3 border-t border-slate-50">
             <div className="w-10 h-10 rounded-full bg-indigo-50 flex items-center justify-center text-indigo-600">
-              <Activity size={18} />
+              <IndianRupee size={18} />
             </div>
             <div>
-              <span className="text-[10px] text-slate-450 block uppercase font-bold">Remaining Residual Cash</span>
+              <span className="text-[10px] text-slate-450 block uppercase font-bold">Remaining Monthly Leftovers</span>
               <span className="text-sm font-bold text-slate-800 font-mono">{formatUSD(metrics.disposableIncome)} /mo</span>
             </div>
           </div>
@@ -237,7 +238,7 @@ export default function ResultsDashboard({ record, onRestart, onSaveHistory }: R
         {/* DTI Card */}
         <div className="p-5 bg-slate-50/50 border border-slate-100 rounded-2xl">
           <div className="flex justify-between items-center mb-1">
-            <span className="text-xs font-semibold text-slate-500 uppercase tracking-wider">Total Debt-to-Income (DTI)</span>
+            <span className="text-xs font-semibold text-slate-500 uppercase tracking-wider">Monthly Debt vs Monthly Income</span>
             <span className="cursor-help" title="Percentage of income allocated to all monthly debt obligations (current + proposed).">
               <HelpCircle size={14} className="text-slate-300" />
             </span>
@@ -249,13 +250,13 @@ export default function ResultsDashboard({ record, onRestart, onSaveHistory }: R
               style={{ width: `${Math.min(100, metrics.dtiRatio)}%` }}
             ></div>
           </div>
-          <span className="text-[10px] text-slate-400 mt-1.5 block">Recommended baseline index: under 36%</span>
+          <span className="text-[10px] text-slate-400 mt-1.5 block">Recommended level: under 36%</span>
         </div>
 
         {/* EMI ratio card */}
         <div className="p-5 bg-slate-50/50 border border-slate-100 rounded-2xl">
           <div className="flex justify-between items-center mb-1">
-            <span className="text-xs font-semibold text-slate-500 uppercase tracking-wider">Proposed EMI Weight</span>
+            <span className="text-xs font-semibold text-slate-500 uppercase tracking-wider">Monthly Loan Payment Load</span>
             <span className="cursor-help" title="Percentage of gross monthly income required solely to cover this new proposed loan payment.">
               <HelpCircle size={14} className="text-slate-300" />
             </span>
@@ -270,7 +271,7 @@ export default function ResultsDashboard({ record, onRestart, onSaveHistory }: R
         {/* Savings reserve ratio card */}
         <div className="p-5 bg-slate-50/50 border border-slate-100 rounded-2xl">
           <div className="flex justify-between items-center mb-1">
-            <span className="text-xs font-semibold text-slate-500 uppercase tracking-wider">Monthly Savings Rate</span>
+            <span className="text-xs font-semibold text-slate-500 uppercase tracking-wider">Monthly Savings vs Income</span>
             <span className="cursor-help" title="Standard savings flow calculated as a percentage of your monthly gross incoming streams.">
               <HelpCircle size={14} className="text-slate-300" />
             </span>
@@ -287,7 +288,7 @@ export default function ResultsDashboard({ record, onRestart, onSaveHistory }: R
       <div className="border-b border-slate-200" id="results-toggle-tabs">
         <nav className="flex gap-4">
           {[
-            { id: 'overview', label: 'Underwriter Diagnostics', icon: FileText },
+            { id: 'overview', label: 'Eligibility Diagnostics', icon: FileText },
             { id: 'charts', label: 'Cashflow Data Visualizers', icon: Activity },
             { id: 'ai-report', label: 'AI Advisor Insight Report', icon: Sparkles },
           ].map((tab) => {
@@ -314,19 +315,19 @@ export default function ResultsDashboard({ record, onRestart, onSaveHistory }: R
 
       {/* Tab contents */}
       <div className="bg-white border border-slate-100 rounded-3xl p-6 md:p-8 shadow-xs min-h-[350px]">
-        {/* TAB 1: Underwriter Diagnostics */}
+        {/* TAB 1: Eligibility Diagnostics */}
         {activeTab === 'overview' && (
           <div className="space-y-6" id="overview-tab-content">
             <div>
-              <h2 className="text-base font-bold text-slate-800">Deterministic Score Weight Distributions</h2>
-              <p className="text-xs text-slate-500">Underwriting scoring points contributing to the {metrics.approvalProbability}% outcome index.</p>
+              <h2 className="text-base font-bold text-slate-800">Scoring Point Breakdown</h2>
+              <p className="text-xs text-slate-500">Eligibility scoring points contributing to the {metrics.approvalProbability}% outcome index.</p>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div className="p-4 border border-slate-50 rounded-xl space-y-3">
                 <div className="flex justify-between items-center text-xs">
                   <span className="font-bold text-slate-700 flex items-center gap-1">
-                    <span className="w-2 h-2 rounded-full bg-indigo-500"></span> FICO Credit Tier (40%)
+                    <span className="w-2 h-2 rounded-full bg-indigo-500"></span> Credit Score Category (40%)
                   </span>
                   <span className="font-mono text-slate-500">{metrics.creditPoints} / 100 pts</span>
                 </div>
@@ -338,7 +339,7 @@ export default function ResultsDashboard({ record, onRestart, onSaveHistory }: R
               <div className="p-4 border border-slate-50 rounded-xl space-y-3">
                 <div className="flex justify-between items-center text-xs">
                   <span className="font-bold text-slate-700 flex items-center gap-1">
-                    <span className="w-2 h-2 rounded-full bg-amber-500"></span> Debt Constraints - DTI (30%)
+                    <span className="w-2 h-2 rounded-full bg-amber-500"></span> Monthly Debt Obligations vs Income (30%)
                   </span>
                   <span className="font-mono text-slate-500">{metrics.debtPoints} / 100 pts</span>
                 </div>
@@ -350,7 +351,7 @@ export default function ResultsDashboard({ record, onRestart, onSaveHistory }: R
               <div className="p-4 border border-slate-50 rounded-xl space-y-3">
                 <div className="flex justify-between items-center text-xs">
                   <span className="font-bold text-slate-700 flex items-center gap-1">
-                    <span className="w-2 h-2 rounded-full bg-teal-500"></span> Liquid Surplus Ratio (15%)
+                    <span className="w-2 h-2 rounded-full bg-teal-500"></span> Monthly Savings Buffer (15%)
                   </span>
                   <span className="font-mono text-slate-500">{metrics.savingsPoints} / 100 pts</span>
                 </div>
@@ -377,7 +378,7 @@ export default function ResultsDashboard({ record, onRestart, onSaveHistory }: R
               <div>
                 <span className="text-xs font-bold text-slate-800 uppercase block mb-0.5">Stress-Test Scenario Note</span>
                 <span className="text-[11px] text-slate-500 leading-relaxed block">
-                  A stress rate buffer of <strong>2.00% p.a.</strong> has been evaluated on top of the base loan rate matrix of <strong>{metrics.interestRate}%</strong>. The applicant is likely to exhibit sufficient capital buffer matching W2 income streams, but high consumer balances (e.g., active revolving cards) will trigger warning levels on DTI.
+                  A stress rate buffer of <strong>2.00% p.a.</strong> has been evaluated on top of the base loan rate matrix of <strong>{metrics.interestRate}%</strong>. The applicant is likely to exhibit sufficient capital buffer matching income streams, but high consumer balances (e.g., active revolving cards) will trigger warning levels on debt vs income ratios.
                 </span>
               </div>
             </div>
@@ -398,8 +399,8 @@ export default function ResultsDashboard({ record, onRestart, onSaveHistory }: R
                   <BarChart data={outflowData} margin={{ top: 20, right: 30, left: 20, bottom: 5 }}>
                     <CartesianGrid strokeDasharray="3 3" vertical={false} />
                     <XAxis dataKey="name" stroke="#94A3B8" fontSize={11} tickLine={false} />
-                    <YAxis stroke="#94A3B8" fontSize={11} tickFormatter={(v) => `$${v}`} tickLine={false} />
-                    <Tooltip formatter={(value) => [`$${value.toLocaleString()}`]} />
+                    <YAxis stroke="#94A3B8" fontSize={11} tickFormatter={(v) => `₹${Number(v).toLocaleString('en-IN')}`} tickLine={false} />
+                    <Tooltip formatter={(value) => [`₹${Number(value).toLocaleString('en-IN')}`]} />
                     <Legend iconType="circle" fontSize={11} wrapperStyle={{ paddingTop: 10 }} />
                     <Bar dataKey="Gross Income" fill="#5B4CF0" radius={[4, 4, 0, 0]} />
                     <Bar dataKey="Everyday Expenses" fill="#94A3B8" radius={[4, 4, 0, 0]} />
@@ -413,7 +414,7 @@ export default function ResultsDashboard({ record, onRestart, onSaveHistory }: R
             {/* Chart 2: Cumulative Reserves */}
             <div className="space-y-4 pt-6 border-t border-slate-100">
               <div>
-                <h3 className="text-sm font-bold text-slate-800">12-Month Projected Liquid Savings Cushion</h3>
+                <h3 className="text-sm font-bold text-slate-800">12-Month Projected Savings Cushion</h3>
                 <p className="text-xs text-slate-500">Estimating cash reserve trends over a 12-month timeline with vs without the requested proposed loan burden.</p>
               </div>
               <div className="h-64">
@@ -431,8 +432,8 @@ export default function ResultsDashboard({ record, onRestart, onSaveHistory }: R
                     </defs>
                     <CartesianGrid strokeDasharray="3 3" vertical={false} />
                     <XAxis dataKey="name" stroke="#94A3B8" fontSize={11} tickLine={false} />
-                    <YAxis stroke="#94A3B8" fontSize={11} tickFormatter={(v) => `$${v}`} tickLine={false} />
-                    <Tooltip formatter={(value) => [`$${value.toLocaleString()}`]} />
+                    <YAxis stroke="#94A3B8" fontSize={11} tickFormatter={(v) => `₹${Number(v).toLocaleString('en-IN')}`} tickLine={false} />
+                    <Tooltip formatter={(value) => [`₹${Number(value).toLocaleString('en-IN')}`]} />
                     <Legend wrapperStyle={{ paddingTop: 10 }} />
                     <Area type="monotone" dataKey="Current Savings Cushion" stroke="#22C55E" fillOpacity={1} fill="url(#currentSavingsGrad)" strokeWidth={2} />
                     <Area type="monotone" dataKey="Cushion with New Loan" stroke="#5B4CF0" fillOpacity={1} fill="url(#proposedSavingsGrad)" strokeWidth={2} />
@@ -449,12 +450,12 @@ export default function ResultsDashboard({ record, onRestart, onSaveHistory }: R
             <div className="flex items-center justify-between border-b border-slate-100 pb-3">
               <div>
                 <h2 className="text-base font-bold text-slate-800 flex items-center gap-1.5">
-                  <Sparkles size={18} className="text-[#5B4CF0]" /> AI Underwriter Report
+                  <Sparkles size={18} className="text-[#5B4CF0]" /> AI Advisor Report
                 </h2>
-                <p className="text-xs text-slate-500">Real-time structured feedback compiled securely by Gemini 3.5 Flash server proxy models.</p>
+                <p className="text-xs text-slate-500">Real-time structured feedback compiled securely by Gemini 2.5 Flash server proxy models.</p>
               </div>
               <span className="px-2.5 py-0.5 bg-indigo-50 border border-indigo-100 text-[#5B4CF0] text-[10px] font-bold rounded-md">
-                Strict Underwriter Schema v1.2
+                Advisor Assessment Guidance
               </span>
             </div>
 
@@ -533,7 +534,7 @@ export default function ResultsDashboard({ record, onRestart, onSaveHistory }: R
             ) : (
               <div className="flex flex-col items-center justify-center py-12 text-slate-400 font-medium">
                 <SpinnerIcon className="w-8 h-8 animate-spin text-[#5B4CF0] mb-3" />
-                <span>Synchronizing structured credit files with Gemini... Please hold.</span>
+                <span>Formulating your advisor insight report... Please wait.</span>
               </div>
             )}
           </div>

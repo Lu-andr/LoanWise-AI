@@ -30,8 +30,8 @@ export default function App() {
   // Profile preferences
   const [profile, setProfile] = useState<UserProfile>({
     name: 'Sarah Jenkins',
-    city: 'New York',
-    currency: 'USD',
+    city: 'Mumbai',
+    currency: 'INR',
     themeMode: 'futuristic-glass'
   });
 
@@ -90,8 +90,8 @@ export default function App() {
     setActiveRecord(null);
     setProfile({
       name: 'Sarah Jenkins',
-      city: 'New York',
-      currency: 'USD',
+      city: 'Mumbai',
+      currency: 'INR',
       themeMode: 'futuristic-glass'
     });
     setCurrentScreen('landing');
@@ -156,7 +156,7 @@ export default function App() {
           'Filing appropriate corrections with credit bureaus can elevate FICO performance ratings.'
         ],
         alternatives: [
-          `Limit requested debt principal to $${Math.round(input.loanAmount * 0.75)} to establish stronger underwriting cushions.`,
+          `Limit requested debt principal to ₹${Math.round(input.loanAmount * 0.75).toLocaleString('en-IN')} to establish stronger underwriting cushions.`,
           'Inquire with direct retail commercial lenders regarding securing options or third-party co-signers.'
         ]
       };

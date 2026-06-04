@@ -17,19 +17,19 @@ interface InsightsPageProps {
 }
 
 export default function InsightsPage({ currentRecord }: InsightsPageProps) {
-  // Default base values to seed play pen
+  // Default base values to seed play pen using Indian Rupee scale
   const baseInput: LoanInput = currentRecord || {
-    monthlyIncome: 6000,
-    existingEmi: 400,
-    monthlyExpenses: 2000,
-    savings: 1500,
-    creditScore: 700,
+    monthlyIncome: 150000,
+    existingEmi: 15000,
+    monthlyExpenses: 45000,
+    savings: 30000,
+    creditScore: 720,
     employmentType: 'salaried',
     experience: 3,
     age: 28,
-    city: 'Los Angeles',
+    city: 'Mumbai',
     loanType: 'home',
-    loanAmount: 200000,
+    loanAmount: 3000000,
     loanTenure: 15,
   };
 
@@ -138,14 +138,14 @@ export default function InsightsPage({ currentRecord }: InsightsPageProps) {
           <div className="space-y-2">
             <div className="flex justify-between text-xs">
               <span className="font-semibold text-slate-600">Simulated monthly gross income:</span>
-              <span className="font-bold text-slate-900 font-mono">${incomeSim.toLocaleString()}</span>
+              <span className="font-bold text-slate-900 font-mono">₹{incomeSim.toLocaleString('en-IN')}</span>
             </div>
             <input
               id="sim-income-lever"
               type="range"
-              min="1000"
-              max="25000"
-              step="500"
+              min="10000"
+              max="500000"
+              step="5000"
               value={incomeSim}
               onChange={(e) => setIncomeSim(Number(e.target.value))}
               className="w-full h-1 bg-slate-100 appearance-none rounded cursor-pointer accent-[#5B4CF0]"
@@ -156,14 +156,14 @@ export default function InsightsPage({ currentRecord }: InsightsPageProps) {
           <div className="space-y-2">
             <div className="flex justify-between text-xs">
               <span className="font-semibold text-slate-600">Active outstanding debt EMIs:</span>
-              <span className="font-bold text-slate-900 font-mono">${debtSim.toLocaleString()}</span>
+              <span className="font-bold text-slate-900 font-mono">₹{debtSim.toLocaleString('en-IN')}</span>
             </div>
             <input
               id="sim-debt-lever"
               type="range"
               min="0"
-              max="8000"
-              step="100"
+              max="200000"
+              step="1000"
               value={debtSim}
               onChange={(e) => setDebtSim(Number(e.target.value))}
               className="w-full h-1 bg-slate-100 appearance-none rounded cursor-pointer accent-[#EA580C]"
@@ -174,14 +174,14 @@ export default function InsightsPage({ currentRecord }: InsightsPageProps) {
           <div className="space-y-2">
             <div className="flex justify-between text-xs">
               <span className="font-semibold text-slate-600"> Rent & Living Outflows:</span>
-              <span className="font-bold text-slate-900 font-mono">${expensesSim.toLocaleString()}</span>
+              <span className="font-bold text-slate-900 font-mono">₹{expensesSim.toLocaleString('en-IN')}</span>
             </div>
             <input
               id="sim-expenses-lever"
               type="range"
-              min="500"
-              max="10000"
-              step="100"
+              min="5000"
+              max="200000"
+              step="1000"
               value={expensesSim}
               onChange={(e) => setExpensesSim(Number(e.target.value))}
               className="w-full h-1 bg-slate-100 appearance-none rounded cursor-pointer accent-indigo-400"
@@ -210,14 +210,14 @@ export default function InsightsPage({ currentRecord }: InsightsPageProps) {
           <div className="space-y-2">
             <div className="flex justify-between text-xs">
               <span className="font-semibold text-slate-600">Simulate modified borrowing sum:</span>
-              <span className="font-bold text-slate-900 font-mono">${loanAmountSim.toLocaleString()}</span>
+              <span className="font-bold text-slate-900 font-mono">₹{loanAmountSim.toLocaleString('en-IN')}</span>
             </div>
             <input
               id="sim-amount-lever"
               type="range"
-              min="5000"
-              max="1000000"
-              step="5000"
+              min="100000"
+              max="15000000"
+              step="50000"
               value={loanAmountSim}
               onChange={(e) => setLoanAmountSim(Number(e.target.value))}
               className="w-full h-1 bg-slate-100 appearance-none rounded cursor-pointer accent-[#55D6FF]"
@@ -243,7 +243,7 @@ export default function InsightsPage({ currentRecord }: InsightsPageProps) {
               {/* Box 2 proposed EMI */}
               <div className="p-4 bg-white border border-slate-100 rounded-2xl">
                 <span className="text-[10px] text-slate-400 font-bold block uppercase mb-1">Hypothetical EMI</span>
-                <span className="text-xl font-bold text-indigo-700 font-mono">${simMetrics.proposedEmi.toLocaleString()}</span>
+                <span className="text-xl font-bold text-indigo-700 font-mono">₹{simMetrics.proposedEmi.toLocaleString('en-IN')}</span>
                 <span className="text-[9px] text-slate-450 mt-1 block">p.m. at {simMetrics.interestRate}% rating benchmark</span>
               </div>
             </div>

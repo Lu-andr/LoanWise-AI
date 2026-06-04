@@ -85,10 +85,10 @@ export default function SettingsPage({ profile, onChangeProfile }: Omit<Settings
               value={currency}
               onChange={(e) => setCurrency(e.target.value)}
             >
+              <option value="INR">INR (₹)</option>
               <option value="USD">USD ($)</option>
               <option value="GBP">GBP (£)</option>
               <option value="EUR">EUR (€)</option>
-              <option value="INR">INR (₹)</option>
             </select>
           </div>
 

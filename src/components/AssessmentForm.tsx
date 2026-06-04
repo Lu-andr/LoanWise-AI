@@ -1,6 +1,6 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { 
-  DollarSign, 
+  IndianRupee, 
   User, 
   MapPin, 
   CreditCard, 
@@ -23,42 +23,21 @@ export default function AssessmentForm({ initialValues, onSubmitAssessment }: As
   const [currentStep, setCurrentStep] = useState<number>(1);
   const [errors, setErrors] = useState<Record<string, string>>({});
 
-  // Form State
+  // Form State with sensible Indian Rupee defaults
   const [form, setForm] = useState<LoanInput>({
-    monthlyIncome: initialValues?.monthlyIncome || 6000,
-    existingEmi: initialValues?.existingEmi || 0,
-    monthlyExpenses: 2000,
-    savings: 1500,
-    creditScore: 720,
-    employmentType: 'salaried',
-    experience: 3,
-    age: 28,
-    city: 'New York',
-    loanType: 'home',
-    loanAmount: 180000,
-    loanTenure: 15,
+    monthlyIncome: initialValues?.monthlyIncome || 150000,
+    existingEmi: initialValues?.existingEmi || 15000,
+    monthlyExpenses: initialValues?.monthlyExpenses || 45000,
+    savings: initialValues?.savings || 30000,
+    creditScore: initialValues?.creditScore || 720,
+    employmentType: initialValues?.employmentType || 'salaried',
+    experience: initialValues?.experience || 3,
+    age: initialValues?.age || 28,
+    city: initialValues?.city || 'Mumbai',
+    loanType: initialValues?.loanType || 'home',
+    loanAmount: initialValues?.loanAmount || 3000000,
+    loanTenure: initialValues?.loanTenure || 15,
   });
-
-  const [hasRestoredDraft, setHasRestoredDraft] = useState<boolean>(false);
-
-  // Check for auto-saved draft
-  useEffect(() => {
-    const savedDraft = localStorage.getItem('loanwise_form_draft');
-    if (savedDraft && !initialValues) {
-      try {
-        const parsedDraft = JSON.parse(savedDraft);
-        setForm(parsedDraft);
-        setHasRestoredDraft(true);
-      } catch (e) {
-        console.error('Failed to parse draft', e);
-      }
-    }
-  }, [initialValues]);
-
-  // Auto-save form changes to local storage
-  useEffect(() => {
-    localStorage.setItem('loanwise_form_draft', JSON.stringify(form));
-  }, [form]);
 
   // Handle value modifications
   const updateField = (key: keyof LoanInput, value: any) => {
@@ -76,38 +55,18 @@ export default function AssessmentForm({ initialValues, onSubmitAssessment }: As
     }
   };
 
-  const clearDraft = () => {
-    localStorage.removeItem('loanwise_form_draft');
-    setHasRestoredDraft(false);
-    // set to default values
-    setForm({
-      monthlyIncome: 6000,
-      existingEmi: 0,
-      monthlyExpenses: 2000,
-      savings: 1500,
-      creditScore: 720,
-      employmentType: 'salaried',
-      experience: 3,
-      age: 28,
-      city: 'New York',
-      loanType: 'home',
-      loanAmount: 180000,
-      loanTenure: 15,
-    });
-  };
-
   const validateStep = (step: number): boolean => {
     const stepErrors: Record<string, string> = {};
 
     if (step === 1) {
-      if (form.monthlyIncome <= 0) stepErrors.monthlyIncome = 'Income must be greater than zero.';
-      if (form.existingEmi < 0) stepErrors.existingEmi = 'EMI cannot be negative.';
-      if (form.monthlyExpenses < 0) stepErrors.monthlyExpenses = 'Expenses cannot be negative.';
-      if (form.savings < 0) stepErrors.savings = 'Savings cannot be negative.';
+      if (form.monthlyIncome <= 0) stepErrors.monthlyIncome = 'Monthly income must be greater than zero.';
+      if (form.existingEmi < 0) stepErrors.existingEmi = 'Monthly loan payments cannot be negative.';
+      if (form.monthlyExpenses < 0) stepErrors.monthlyExpenses = 'Everyday expenses cannot be negative.';
+      if (form.savings < 0) stepErrors.savings = 'Available savings cannot be negative.';
       
       const totalCashflowCommit = form.existingEmi + form.monthlyExpenses;
       if (totalCashflowCommit > form.monthlyIncome) {
-        stepErrors.monthlyExpenses = 'Warning: Combined expenses and EMIs exceed monthly gross income.';
+        stepErrors.monthlyExpenses = 'Warning: Combined monthly obligations and everyday expenses exceed your incoming cashflow.';
       }
     }
 
@@ -122,16 +81,16 @@ export default function AssessmentForm({ initialValues, onSubmitAssessment }: As
         stepErrors.experience = 'Job experience tenure cannot be negative.';
       }
       if (!form.city.trim()) {
-        stepErrors.city = 'Please state your metropolitan area/residential city.';
+        stepErrors.city = 'Please state your residential city.';
       }
     }
 
     if (step === 3) {
       if (form.loanAmount <= 0) {
-        stepErrors.loanAmount = 'Requested loan principal size must be greater than $0.';
+        stepErrors.loanAmount = 'Requested loan amount must be greater than ₹0.';
       }
       if (form.loanTenure <= 0 || form.loanTenure > 40) {
-        stepErrors.loanTenure = 'Loan amortisation tenure must fit between 1 and 40 years.';
+        stepErrors.loanTenure = 'Loan payment tenure must fit between 1 and 40 years.';
       }
     }
 
@@ -152,39 +111,21 @@ export default function AssessmentForm({ initialValues, onSubmitAssessment }: As
   const handleFormSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (validateStep(3)) {
-      // Clear draft on successful evaluation
-      localStorage.removeItem('loanwise_form_draft');
       onSubmitAssessment(form);
     }
   };
 
   return (
     <div className="max-w-xl mx-auto" id="assessment-panel">
-      {/* Restore Banner */}
-      {hasRestoredDraft && (
-        <div className="mb-6 p-4 bg-indigo-50 border border-indigo-100 rounded-2xl flex items-center justify-between shadow-xs" id="restore-draft-alert">
-          <div className="flex items-center gap-2.5">
-            <History size={16} className="text-[#5B4CF0]" />
-            <span className="text-xs text-indigo-900 font-medium">Auto-saved draft retrieved automatically from your local browser.</span>
-          </div>
-          <button 
-            id="discard-draft-action"
-            onClick={clearDraft}
-            className="text-[10px] font-bold text-slate-500 hover:text-slate-800 transition-colors bg-white px-2.5 py-1.5 rounded-lg border border-slate-200"
-          >
-            Discard Auto-save & Reset
-          </button>
-        </div>
-      )}
 
       {/* Multi-step progressive indicator */}
       <div className="mb-8" id="form-progress-indicator">
         <div className="flex justify-between items-center text-xs font-semibold text-slate-400 mb-2">
           <span>STEP {currentStep} OF 3</span>
           <span className="text-[#5B4CF0]">
-            {currentStep === 1 && 'Capital Reserves & Margins'}
-            {currentStep === 2 && 'Personal Risk Metrics'}
-            {currentStep === 3 && 'Borrowing Request Specs'}
+            {currentStep === 1 && 'Income & Available Savings'}
+            {currentStep === 2 && 'Personal Stability'}
+            {currentStep === 3 && 'How Much You Can Comfortably Borrow Specs'}
           </span>
         </div>
         <div className="w-full bg-slate-100 h-2 rounded-full overflow-hidden flex gap-0.5">
@@ -197,31 +138,31 @@ export default function AssessmentForm({ initialValues, onSubmitAssessment }: As
       {/* Structured Card */}
       <form onSubmit={handleFormSubmit} className="bg-white border border-slate-100 rounded-3xl p-6 md:p-8 shadow-sm space-y-6">
 
-        {/* STEP 1: CAPITAL RESERVES & INCOME */}
+        {/* STEP 1: INCOME & AVAILABLE SAVINGS */}
         {currentStep === 1 && (
           <div className="space-y-5" id="step-1-elements">
             <div className="border-b border-slate-100 pb-3">
               <h2 className="text-lg font-bold text-slate-800 flex items-center gap-1.5">
-                <DollarSign size={18} className="text-[#5B4CF0]" /> Income & Liabilities
+                <IndianRupee size={18} className="text-[#5B4CF0]" /> Income & Everyday Obligations
               </h2>
-              <p className="text-xs text-slate-500">Provide monthly money flows for basic liquid calculations.</p>
+              <p className="text-xs text-slate-500">Provide monthly money flows for basic financial health calculations.</p>
             </div>
 
             {/* Income */}
             <div className="space-y-1.5">
               <label className="text-xs font-bold text-slate-700 flex justify-between" htmlFor="monthlyIncome">
-                <span>Monthly Gross Income (USD)</span>
+                <span>Monthly Income (₹)</span>
                 {errors.monthlyIncome && <span className="text-rose-500 text-[10px] normal-case">{errors.monthlyIncome}</span>}
               </label>
               <div className="relative">
                 <span className="absolute inset-y-0 left-0 pl-3.5 flex items-center text-slate-400 font-mono text-xs font-bold">
-                  $
+                  ₹
                 </span>
                 <input
                   id="monthlyIncome"
                   type="number"
                   min="0"
-                  placeholder="e.g. 5000"
+                  placeholder="e.g. 150000"
                   value={form.monthlyIncome || ''}
                   onChange={(e) => updateField('monthlyIncome', Math.max(0, Number(e.target.value)))}
                   className="w-full pl-8 pr-4 py-3 bg-slate-5 font-mono text-xs font-semibold rounded-xl border border-slate-200 focus:outline-[#5B4CF0] transition-colors"
@@ -232,12 +173,12 @@ export default function AssessmentForm({ initialValues, onSubmitAssessment }: As
             {/* Existing EMIs */}
             <div className="space-y-1.5">
               <label className="text-xs font-bold text-slate-700 flex justify-between" htmlFor="existingEmi">
-                <span>Existing EMIs / Active Debt Service</span>
+                <span>Existing Monthly Loan Payments</span>
                 {errors.existingEmi && <span className="text-rose-500 text-[10px] normal-case">{errors.existingEmi}</span>}
               </label>
               <div className="relative">
                 <span className="absolute inset-y-0 left-0 pl-3.5 flex items-center text-slate-400 font-mono text-xs font-bold">
-                  $
+                  ₹
                 </span>
                 <input
                   id="existingEmi"
@@ -249,7 +190,7 @@ export default function AssessmentForm({ initialValues, onSubmitAssessment }: As
                   className="w-full pl-8 pr-4 py-3 bg-slate-5 font-mono text-xs font-semibold rounded-xl border border-slate-200 focus:outline-[#5B4CF0] transition-colors"
                 />
               </div>
-              <p className="text-[10px] text-slate-400 uppercase tracking-wider leading-relaxed">Car loans, active credit cards, student financing burden.</p>
+              <p className="text-[10px] text-slate-400 uppercase tracking-wider leading-relaxed">Car payments, active credit card bills, and other monthly debts.</p>
             </div>
 
             {/* Monthly Living Expenses */}
@@ -260,13 +201,13 @@ export default function AssessmentForm({ initialValues, onSubmitAssessment }: As
               </label>
               <div className="relative">
                 <span className="absolute inset-y-0 left-0 pl-3.5 flex items-center text-slate-400 font-mono text-xs font-bold">
-                  $
+                  ₹
                 </span>
                 <input
                   id="monthlyExpenses"
                   type="number"
                   min="0"
-                  placeholder="e.g. 2000"
+                  placeholder="e.g. 45000"
                   value={form.monthlyExpenses || ''}
                   onChange={(e) => updateField('monthlyExpenses', Math.max(0, Number(e.target.value)))}
                   className="w-full pl-8 pr-4 py-3 bg-slate-5 font-mono text-xs font-semibold rounded-xl border border-slate-200 focus:outline-[#5B4CF0] transition-colors"
@@ -276,19 +217,19 @@ export default function AssessmentForm({ initialValues, onSubmitAssessment }: As
 
             {/* Monthly Liquid Savings */}
             <div className="space-y-1.5">
-              <label className="text-xs font-bold text-slate-700 flex justify-between" htmlFor="savings">
-                <span>Liquid Cash Savings (Monthly Surplus)</span>
+              <label className="text-xs font-bold text-slate-750 flex justify-between" htmlFor="savings">
+                <span>Monthly Surplus / Savings Additions</span>
                 {errors.savings && <span className="text-rose-500 text-[10px] normal-case">{errors.savings}</span>}
               </label>
               <div className="relative">
                 <span className="absolute inset-y-0 left-0 pl-3.5 flex items-center text-slate-400 font-mono text-xs font-bold">
-                  $
+                  ₹
                 </span>
                 <input
                   id="savings"
                   type="number"
                   min="0"
-                  placeholder="Monthly savings or cash cushion flow"
+                  placeholder="Monthly savings or surplus cash"
                   value={form.savings || ''}
                   onChange={(e) => updateField('savings', Math.max(0, Number(e.target.value)))}
                   className="w-full pl-8 pr-4 py-3 bg-slate-5 font-mono text-xs font-semibold rounded-xl border border-slate-200 focus:outline-[#5B4CF0] transition-colors"
@@ -298,20 +239,20 @@ export default function AssessmentForm({ initialValues, onSubmitAssessment }: As
           </div>
         )}
 
-        {/* STEP 2: PERSONAL RISK METRICS */}
+        {/* STEP 2: PROFILE & CREDITS */}
         {currentStep === 2 && (
           <div className="space-y-5" id="step-2-elements">
             <div className="border-b border-slate-100 pb-3">
               <h2 className="text-lg font-bold text-slate-800 flex items-center gap-1.5">
                 <User size={18} className="text-[#5B4CF0]" /> Profile & Credit Score
               </h2>
-              <p className="text-xs text-slate-500">Provide employment and standard financial stability indicators.</p>
+              <p className="text-xs text-slate-500">Provide employment details and standard stability indicators.</p>
             </div>
 
             {/* Credit Score Rating Slider / input */}
             <div className="space-y-2">
               <div className="flex justify-between items-center text-xs">
-                <span className="font-bold text-slate-700">Equifax/FICO Credit Score</span>
+                <span className="font-bold text-slate-700">Credit Score</span>
                 <span className="px-2.5 py-1 bg-slate-105 rounded-lg text-xs font-mono font-bold text-indigo-700">
                   {form.creditScore} 
                   {form.creditScore >= 750 ? ' (Excellent)' : form.creditScore >= 700 ? ' (Good)' : form.creditScore >= 650 ? ' (Fair)' : ' (Poor)'}
@@ -345,17 +286,17 @@ export default function AssessmentForm({ initialValues, onSubmitAssessment }: As
                 onChange={(e) => updateField('employmentType', e.target.value as EmploymentType)}
                 className="w-full px-3 py-3 bg-slate-5 font-mono text-xs font-semibold rounded-xl border border-slate-200 focus:outline-[#5B4CF0] transition-colors"
               >
-                <option value="salaried">W2 Monthly Salaried</option>
+                <option value="salaried">Monthly Salaried Professional</option>
                 <option value="self_employed">Independent Self-Employed</option>
-                <option value="business_owner">C-Corp/LLC Business Owner</option>
-                <option value="unemployed">Unemployed/Retired Surplus</option>
+                <option value="business_owner">Business Owner</option>
+                <option value="unemployed">Unemployed / Other</option>
               </select>
             </div>
 
             {/* Years of Experience / stability */}
             <div className="space-y-1.5">
               <label className="text-xs font-bold text-slate-700 flex justify-between" htmlFor="experience">
-                <span>Professional Tenure (Years of Experience)</span>
+                <span>Professional Work Experience (Years)</span>
                 {errors.experience && <span className="text-rose-500 text-[10px] normal-case">{errors.experience}</span>}
               </label>
               <input
@@ -363,7 +304,7 @@ export default function AssessmentForm({ initialValues, onSubmitAssessment }: As
                 type="number"
                 min="0"
                 max="50"
-                placeholder="Years of active career tenure"
+                placeholder="Years of active career"
                 value={form.experience || ''}
                 onChange={(e) => updateField('experience', Math.max(0, Number(e.target.value)))}
                 className="w-full px-4 py-3 bg-slate-5 font-mono text-xs font-semibold rounded-xl border border-slate-200 focus:outline-[#5B4CF0] transition-colors"
@@ -396,7 +337,7 @@ export default function AssessmentForm({ initialValues, onSubmitAssessment }: As
                 <input
                   id="city"
                   type="text"
-                  placeholder="e.g. San Francisco"
+                  placeholder="e.g. Mumbai"
                   value={form.city}
                   onChange={(e) => updateField('city', e.target.value)}
                   className="w-full px-4 py-3 bg-slate-5 font-medium text-xs rounded-xl border border-slate-200 focus:outline-[#5B4CF0] transition-colors"
@@ -411,7 +352,7 @@ export default function AssessmentForm({ initialValues, onSubmitAssessment }: As
           <div className="space-y-5" id="step-3-elements">
             <div className="border-b border-slate-100 pb-3">
               <h2 className="text-lg font-bold text-slate-800 flex items-center gap-1.5">
-                <Briefcase size={18} className="text-[#5B4CF0]" /> Core Request Specifications
+                <Briefcase size={18} className="text-[#5B4CF0]" /> Core Loan Specifications
               </h2>
               <p className="text-xs text-slate-500">Input your requested capital configurations.</p>
             </div>
@@ -419,7 +360,7 @@ export default function AssessmentForm({ initialValues, onSubmitAssessment }: As
             {/* Loan Type */}
             <div className="space-y-1.5">
               <label className="text-xs font-bold text-slate-700" htmlFor="loanType">
-                Loan Category type
+                Loan Category Type
               </label>
               <select
                 id="loanType"
@@ -427,30 +368,30 @@ export default function AssessmentForm({ initialValues, onSubmitAssessment }: As
                 onChange={(e) => updateField('loanType', e.target.value as LoanType)}
                 className="w-full px-3 py-3 bg-slate-5 font-mono text-xs font-semibold rounded-xl border border-slate-200 focus:outline-[#5B4CF0] transition-colors"
               >
-                <option value="home">Real Estate Mortgage (~8.5%)</option>
-                <option value="personal">Unsecured Signature Personal Line (~12.0%)</option>
-                <option value="car">Automobile Assets Secured (~9.5%)</option>
-                <option value="education">Student Professional Tuition (~7.0%)</option>
-                <option value="business">Commercial working capital (~14.5%)</option>
+                <option value="home">Real Estate Mortgage (~8.5% interest)</option>
+                <option value="personal">Unsecured Personal Loan (~12.0% interest)</option>
+                <option value="car">Automobile Loan (~9.5% interest)</option>
+                <option value="education">Student Education Loan (~7.0% interest)</option>
+                <option value="business">Commercial Business Loan (~14.5% interest)</option>
               </select>
             </div>
 
             {/* Loan Amount */}
             <div className="space-y-1.5">
               <label className="text-xs font-bold text-slate-700 flex justify-between" htmlFor="loanAmount">
-                <span>Requested Capital Sum ($ USD)</span>
+                <span>Requested Loan Amount (₹)</span>
                 {errors.loanAmount && <span className="text-rose-500 text-[10px] normal-case">{errors.loanAmount}</span>}
               </label>
               <div className="relative">
                 <span className="absolute inset-y-0 left-0 pl-3.5 flex items-center text-slate-400 font-mono text-xs font-bold">
-                  $
+                  ₹
                 </span>
                 <input
                   id="loanAmount"
                   type="number"
                   min="0"
-                  step="1000"
-                  placeholder="e.g. 150000"
+                  step="50000"
+                  placeholder="e.g. 3000000"
                   value={form.loanAmount || ''}
                   onChange={(e) => updateField('loanAmount', Math.max(0, Number(e.target.value)))}
                   className="w-full pl-8 pr-4 py-3 bg-slate-5 font-mono text-xs font-semibold rounded-xl border border-slate-200 focus:outline-[#5B4CF0] transition-colors"
@@ -461,7 +402,7 @@ export default function AssessmentForm({ initialValues, onSubmitAssessment }: As
             {/* Tenure in Years */}
             <div className="space-y-1.5">
               <label className="text-xs font-bold text-slate-700 flex justify-between" htmlFor="loanTenure">
-                <span>Tenure Duration (Years)</span>
+                <span>Repayment Tenure (Years)</span>
                 {errors.loanTenure && <span className="text-rose-500 text-[10px] normal-case">{errors.loanTenure}</span>}
               </label>
               <input
@@ -473,7 +414,7 @@ export default function AssessmentForm({ initialValues, onSubmitAssessment }: As
                 onChange={(e) => updateField('loanTenure', Math.max(0, Number(e.target.value)))}
                 className="w-full px-4 py-3 bg-slate-5 font-mono text-xs font-semibold rounded-xl border border-slate-200 focus:outline-[#5B4CF0] transition-colors"
               />
-              <p className="text-[10px] text-slate-400 uppercase tracking-wider">Usually 15-30 years for mortgages, and 3-5 years for personal debts.</p>
+              <p className="text-[10px] text-slate-400 uppercase tracking-wider">Usually 15-30 years for home mortgages, and 3-5 years for personal loans.</p>
             </div>
           </div>
         )}

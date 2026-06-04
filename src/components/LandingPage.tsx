@@ -3,7 +3,7 @@ import {
   TrendingUp, 
   ShieldCheck, 
   HelpCircle, 
-  DollarSign, 
+  IndianRupee, 
   Percent, 
   Clock, 
   Sparkles, 
@@ -22,9 +22,9 @@ interface LandingPageProps {
 }
 
 export default function LandingPage({ onStartAssessment }: LandingPageProps) {
-  // Quick pre-estimator state
-  const [quickIncome, setQuickIncome] = useState<number>(5000);
-  const [quickEmi, setQuickEmi] = useState<number>(500);
+  // Quick pre-estimator state with sensible Indian Rupee defaults
+  const [quickIncome, setQuickIncome] = useState<number>(150000);
+  const [quickEmi, setQuickEmi] = useState<number>(15000);
 
   // Quick estimation logic
   const quickDti = quickIncome > 0 ? Math.round((quickEmi / quickIncome) * 100) : 0;
@@ -54,10 +54,10 @@ export default function LandingPage({ onStartAssessment }: LandingPageProps) {
   ];
 
   const categories: { type: LoanType; label: string; icon: any; minEmi: string; limit: string }[] = [
-    { type: 'home', label: 'Mortgage & Home Loans', icon: Home, minEmi: 'Starts at 8.5% p.a.', limit: 'Up to $1.5M capital limit' },
-    { type: 'personal', label: 'Unsecured Personal Credit', icon: DollarSign, minEmi: 'Starts at 12.0% p.a.', limit: 'Up to $50k signature limits' },
-    { type: 'business', label: 'SaaS & Enterprise Funding', icon: Briefcase, minEmi: 'Starts at 14.5% p.a.', limit: 'Up to $2.0M working capital' },
-    { type: 'car', label: 'Secured Automobile Financing', icon: TrendingUp, minEmi: 'Starts at 9.5% p.a.', limit: 'Up to $120k limits' }
+    { type: 'home', label: 'Mortgage & Home Loans', icon: Home, minEmi: 'Starts at 8.5% p.a.', limit: 'Up to ₹1.5 Crore capital limit' },
+    { type: 'personal', label: 'Unsecured Personal Credit', icon: IndianRupee, minEmi: 'Starts at 12.0% p.a.', limit: 'Up to ₹10 Lakh signature limits' },
+    { type: 'business', label: 'SaaS & Enterprise Funding', icon: Briefcase, minEmi: 'Starts at 14.5% p.a.', limit: 'Up to ₹2.0 Crore working capital' },
+    { type: 'car', label: 'Secured Automobile Financing', icon: TrendingUp, minEmi: 'Starts at 9.5% p.a.', limit: 'Up to ₹12 Lakh limits' }
   ];
 
   return (
@@ -129,22 +129,22 @@ export default function LandingPage({ onStartAssessment }: LandingPageProps) {
             <div className="space-y-2">
               <div className="flex justify-between text-xs">
                 <span className="font-semibold text-slate-600">Monthly gross income:</span>
-                <span className="font-bold text-slate-900 font-mono">${quickIncome.toLocaleString()}</span>
+                <span className="font-bold text-slate-900 font-mono">₹{quickIncome.toLocaleString('en-IN')}</span>
               </div>
               <input
                 id="quick-income-range"
                 type="range"
-                min="1000"
-                max="30000"
-                step="500"
+                min="10000"
+                max="500000"
+                step="5000"
                 value={quickIncome}
                 onChange={(e) => setQuickIncome(Number(e.target.value))}
                 className="w-full h-1.5 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-[#5B4CF0]"
               />
               <div className="flex justify-between text-[10px] text-slate-400 font-mono">
-                <span>$1k</span>
-                <span>$15k</span>
-                <span>$30k</span>
+                <span>₹10k</span>
+                <span>₹2.5L</span>
+                <span>₹5L</span>
               </div>
             </div>
 
@@ -152,22 +152,22 @@ export default function LandingPage({ onStartAssessment }: LandingPageProps) {
             <div className="space-y-2">
               <div className="flex justify-between text-xs">
                 <span className="font-semibold text-slate-600">Current Outstanding EMIs:</span>
-                <span className="font-bold text-slate-900 font-mono">${quickEmi.toLocaleString()}</span>
+                <span className="font-bold text-slate-900 font-mono">₹{quickEmi.toLocaleString('en-IN')}</span>
               </div>
               <input
                 id="quick-emi-range"
                 type="range"
                 min="0"
-                max="10000"
-                step="100"
+                max="200000"
+                step="1000"
                 value={quickEmi}
                 onChange={(e) => setQuickEmi(Number(e.target.value))}
                 className="w-full h-1.5 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-[#7A6FFF]"
               />
               <div className="flex justify-between text-[10px] text-slate-400 font-mono">
-                <span>$0</span>
-                <span>$5k</span>
-                <span>$10k</span>
+                <span>₹0</span>
+                <span>₹1L</span>
+                <span>₹2L</span>
               </div>
             </div>
 
