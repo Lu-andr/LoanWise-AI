@@ -205,11 +205,11 @@ export default function App() {
   const themeClass = () => {
     switch (profile.themeMode) {
       case 'midnight-gold':
-        return 'bg-slate-950 text-slate-100 min-h-screen selection:bg-amber-400 selection:text-slate-950';
+        return 'theme-midnight-gold bg-slate-950 text-slate-100 min-h-screen selection:bg-amber-400 selection:text-slate-950';
       case 'neon-slate':
-        return 'bg-[#121820] text-[#D8E1E8] min-h-screen selection:bg-[#55D6FF] selection:text-[#121820]';
+        return 'theme-neon-slate bg-[#121820] text-[#D8E1E8] min-h-screen selection:bg-[#55D6FF] selection:text-[#121820]';
       default:
-        return 'bg-[#F7F9FF] text-slate-800 min-h-screen selection:bg-indigo-200 selection:text-slate-900';
+        return 'theme-light bg-[#F7F9FF] text-slate-800 min-h-screen selection:bg-indigo-200 selection:text-slate-900';
     }
   };
 

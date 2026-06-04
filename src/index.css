@@ -49,3 +49,256 @@
     transform: translateY(0);
   }
 }
+
+/* ==========================================================================
+   PREMIUM CUSTOM THEME ENGINE OVERRIDES FOR DARK MODES
+   ========================================================================== */
+
+/* --- 1. MIDNIGHT DARK GOLD THEME --- */
+.theme-midnight-gold {
+  color: #f1f5f9 !important;
+}
+
+/* Base Headings & Titles */
+.theme-midnight-gold h1,
+.theme-midnight-gold h2,
+.theme-midnight-gold h3,
+.theme-midnight-gold h4,
+.theme-midnight-gold h5,
+.theme-midnight-gold h6 {
+  color: #fbbf24 !important; /* Premium Amber Gold */
+}
+
+/* Structural Layouts & Cards */
+.theme-midnight-gold .bg-white {
+  background-color: #0d121f !important;
+  border-color: rgba(245, 158, 11, 0.18) !important;
+  color: #f8fafc !important;
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.45) !important;
+}
+
+/* Input Fields, select menus, input elements */
+.theme-midnight-gold input,
+.theme-midnight-gold select,
+.theme-midnight-gold textarea {
+  background-color: #171d2c !important;
+  border-color: rgba(245, 158, 11, 0.25) !important;
+  color: #ffffff !important;
+}
+
+.theme-midnight-gold input::placeholder {
+  color: #64748b !important;
+}
+
+.theme-midnight-gold input:focus,
+.theme-midnight-gold select:focus,
+.theme-midnight-gold textarea:focus {
+  border-color: #fbbf24 !important;
+  outline: 2px solid rgba(245, 158, 11, 0.3) !important;
+}
+
+/* All text colors from light-mode slate references */
+.theme-midnight-gold .text-slate-900,
+.theme-midnight-gold .text-slate-850,
+.theme-midnight-gold .text-slate-805,
+.theme-midnight-gold .text-slate-800,
+.theme-midnight-gold .text-slate-705,
+.theme-midnight-gold .text-slate-700 {
+  color: #f8fafc !important;
+}
+
+.theme-midnight-gold .text-slate-600,
+.theme-midnight-gold .text-slate-550,
+.theme-midnight-gold .text-slate-500,
+.theme-midnight-gold .text-slate-450,
+.theme-midnight-gold .text-slate-400 {
+  color: #94a3b8 !important; /* Soft high-visibility slate-400 */
+}
+
+.theme-midnight-gold label {
+  color: #fbcfe8 !important; /* soft highlights */
+  color: #fccf73 !important; /* pale gold label */
+}
+
+/* Translate primary branding text classes values to glorious golden metrics */
+.theme-midnight-gold .text-[#5B4CF0],
+.theme-midnight-gold .text-indigo-600,
+.theme-midnight-gold .text-indigo-700,
+.theme-midnight-gold .text-indigo-805 {
+  color: #fbbf24 !important;
+}
+
+/* Convert background colors (e.g. wrapper bars, panels, sub-boxes) */
+.theme-midnight-gold .bg-slate-5,
+.theme-midnight-gold .bg-slate-50,
+.theme-midnight-gold .bg-slate-100 {
+  background-color: #151c2c !important;
+  color: #f1f5f9 !important;
+}
+
+.theme-midnight-gold .bg-slate-50\/50 {
+  background-color: rgba(21, 28, 44, 0.5) !important;
+}
+
+.theme-midnight-gold .bg-[#F7F9FF] {
+  background-color: #0c101a !important;
+}
+
+.theme-midnight-gold .bg-indigo-50 {
+  background-color: rgba(245, 158, 11, 0.12) !important;
+  color: #fbbf24 !important;
+}
+
+.theme-midnight-gold .text-indigo-900 {
+  color: #f8fafc !important;
+}
+
+.theme-midnight-gold .bg-indigo-50\/50 {
+  background-color: rgba(245, 158, 11, 0.06) !important;
+}
+
+.theme-midnight-gold .border-slate-50,
+.theme-midnight-gold .border-slate-100,
+.theme-midnight-gold .border-slate-200 {
+  border-color: rgba(251, 191, 36, 0.15) !important;
+}
+
+/* Chart Tooltips */
+.theme-midnight-gold .recharts-default-tooltip {
+  background-color: #0d121f !important;
+  border: 1px solid #fbbf24 !important;
+  color: #ffffff !important;
+}
+
+.theme-midnight-gold .recharts-legend-item-text {
+  color: #f8fafc !important;
+}
+
+.theme-midnight-gold .recharts-text {
+  fill: #94a3b8 !important;
+}
+
+
+/* --- 2. CARBON SLATE NEON THEME --- */
+.theme-neon-slate {
+  color: #e2e8f0 !important;
+}
+
+/* Base Headings & Titles */
+.theme-neon-slate h1,
+.theme-neon-slate h2,
+.theme-neon-slate h3,
+.theme-neon-slate h4,
+.theme-neon-slate h5,
+.theme-neon-slate h6 {
+  color: #22d3ee !important; /* Bright Neon Cyan */
+}
+
+/* Cards & Layout panels */
+.theme-neon-slate .bg-white {
+  background-color: #17202c !important;
+  border-color: rgba(6, 182, 212, 0.22) !important;
+  color: #f1f5f9 !important;
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.5) !important;
+}
+
+/* Inputs, Selectors & fields */
+.theme-neon-slate input,
+.theme-neon-slate select,
+.theme-neon-slate textarea {
+  background-color: #1e293b !important;
+  border-color: rgba(34, 211, 238, 0.25) !important;
+  color: #ffffff !important;
+}
+
+.theme-neon-slate input::placeholder {
+  color: #55b2d6 !important;
+  opacity: 0.5;
+}
+
+.theme-neon-slate input:focus,
+.theme-neon-slate select:focus,
+.theme-neon-slate textarea:focus {
+  border-color: #22d3ee !important;
+  outline: 2px solid rgba(6, 182, 212, 0.3) !important;
+}
+
+/* All text colors from light-mode slate references */
+.theme-neon-slate .text-slate-900,
+.theme-neon-slate .text-slate-850,
+.theme-neon-slate .text-slate-805,
+.theme-neon-slate .text-slate-800,
+.theme-neon-slate .text-slate-705,
+.theme-neon-slate .text-slate-700 {
+  color: #f1f5f9 !important;
+}
+
+.theme-neon-slate .text-slate-600,
+.theme-neon-slate .text-slate-550,
+.theme-neon-slate .text-slate-500,
+.theme-neon-slate .text-slate-450,
+.theme-neon-slate .text-slate-400 {
+  color: #94a3b8 !important;
+}
+
+.theme-neon-slate label {
+  color: #67e8f9 !important; /* cyan-300 highlight */
+}
+
+/* Translate primary branding text classes values to glorious cyan */
+.theme-neon-slate .text-[#5B4CF0],
+.theme-neon-slate .text-indigo-600,
+.theme-neon-slate .text-indigo-700,
+.theme-neon-slate .text-indigo-805 {
+  color: #22d3ee !important;
+}
+
+/* Convert background colors (wrapper blocks, panels, sub-boxes) */
+.theme-neon-slate .bg-slate-5,
+.theme-neon-slate .bg-slate-50,
+.theme-neon-slate .bg-slate-100 {
+  background-color: #1f2a3c !important;
+  color: #f8fafc !important;
+}
+
+.theme-neon-slate .bg-slate-50\/50 {
+  background-color: rgba(31, 42, 60, 0.5) !important;
+}
+
+.theme-neon-slate .bg-[#F7F9FF] {
+  background-color: #0f1520 !important;
+}
+
+.theme-neon-slate .bg-indigo-50 {
+  background-color: rgba(34, 211, 238, 0.12) !important;
+  color: #22d3ee !important;
+}
+
+.theme-neon-slate .text-indigo-900 {
+  color: #f1f5f9 !important;
+}
+
+.theme-neon-slate .bg-indigo-50\/50 {
+  background-color: rgba(34, 211, 238, 0.05) !important;
+}
+
+.theme-neon-slate .border-slate-50,
+.theme-neon-slate .border-slate-100,
+.theme-neon-slate .border-slate-200 {
+  border-color: rgba(34, 211, 238, 0.18) !important;
+}
+
+/* Chart Tooltips */
+.theme-neon-slate .recharts-default-tooltip {
+  background-color: #17202c !important;
+  border: 1px solid #22d3ee !important;
+  color: #ffffff !important;
+}
+
+.theme-neon-slate .recharts-legend-item-text {
+  color: #f1f5f9 !important;
+}
+
+.theme-neon-slate .recharts-text {
+  fill: #94a3b8 !important;
+}
